@@ -1,0 +1,6 @@
+D:\QPS\GitHub\Battery Analyser\LibBMS\bin\Debug\LibBMS.dll
+D:\QPS\GitHub\Battery Analyser\LibBMS\bin\Debug\LibBMS.pdb
+D:\QPS\GitHub\Battery Analyser\LibBMS\obj\Debug\LibBMS.csproj.AssemblyReference.cache
+D:\QPS\GitHub\Battery Analyser\LibBMS\obj\Debug\LibBMS.csproj.CoreCompileInputs.cache
+D:\QPS\GitHub\Battery Analyser\LibBMS\obj\Debug\LibBMS.dll
+D:\QPS\GitHub\Battery Analyser\LibBMS\obj\Debug\LibBMS.pdb

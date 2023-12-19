@@ -1,0 +1,6 @@
+D:\QPS\GitHub\Battery Analyser\BMSSerialPortLib\bin\Debug\BMSSerialPortLib.dll
+D:\QPS\GitHub\Battery Analyser\BMSSerialPortLib\bin\Debug\BMSSerialPortLib.pdb
+D:\QPS\GitHub\Battery Analyser\BMSSerialPortLib\obj\Debug\BMSSerialPortLib.csproj.AssemblyReference.cache
+D:\QPS\GitHub\Battery Analyser\BMSSerialPortLib\obj\Debug\BMSSerialPortLib.csproj.CoreCompileInputs.cache
+D:\QPS\GitHub\Battery Analyser\BMSSerialPortLib\obj\Debug\BMSSerialPortLib.dll
+D:\QPS\GitHub\Battery Analyser\BMSSerialPortLib\obj\Debug\BMSSerialPortLib.pdb

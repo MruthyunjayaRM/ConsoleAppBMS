@@ -1,0 +1,12 @@
+D:\QPS\GitHub\Battery Analyser\BMSConsoleApp\obj\Debug\BMSConsoleApp.csproj.AssemblyReference.cache
+D:\QPS\GitHub\Battery Analyser\BMSConsoleApp\obj\Debug\BMSConsoleApp.csproj.CoreCompileInputs.cache
+D:\QPS\GitHub\Battery Analyser\BMSConsoleApp\bin\Debug\BMSConsoleApp.exe.config
+D:\QPS\GitHub\Battery Analyser\BMSConsoleApp\bin\Debug\BMSConsoleApp.exe
+D:\QPS\GitHub\Battery Analyser\BMSConsoleApp\bin\Debug\BMSConsoleApp.pdb
+D:\QPS\GitHub\Battery Analyser\BMSConsoleApp\bin\Debug\LibBMS.dll
+D:\QPS\GitHub\Battery Analyser\BMSConsoleApp\bin\Debug\LibBMS.pdb
+D:\QPS\GitHub\Battery Analyser\BMSConsoleApp\obj\Debug\BMSConsoleApp.csproj.CopyComplete
+D:\QPS\GitHub\Battery Analyser\BMSConsoleApp\obj\Debug\BMSConsoleApp.exe
+D:\QPS\GitHub\Battery Analyser\BMSConsoleApp\obj\Debug\BMSConsoleApp.pdb
+D:\QPS\GitHub\Battery Analyser\BMSConsoleApp\bin\Debug\BMSSerialPortLib.dll
+D:\QPS\GitHub\Battery Analyser\BMSConsoleApp\bin\Debug\BMSSerialPortLib.pdb
