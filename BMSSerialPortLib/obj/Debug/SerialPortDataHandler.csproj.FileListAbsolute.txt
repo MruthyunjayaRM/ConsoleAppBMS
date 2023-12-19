@@ -4,3 +4,9 @@ D:\QPS\GitHub\Battery Analyser\BMSSerialPortLib\obj\Debug\SerialPortDataHandler.
 D:\QPS\GitHub\Battery Analyser\BMSSerialPortLib\obj\Debug\SerialPortDataHandler.csproj.CoreCompileInputs.cache
 D:\QPS\GitHub\Battery Analyser\BMSSerialPortLib\obj\Debug\BMSSerialPortLib.dll
 D:\QPS\GitHub\Battery Analyser\BMSSerialPortLib\obj\Debug\BMSSerialPortLib.pdb
+D:\QPS\GitHub\ConsoleAppBMS\BMSSerialPortLib\bin\Debug\BMSSerialPortLib.dll
+D:\QPS\GitHub\ConsoleAppBMS\BMSSerialPortLib\bin\Debug\BMSSerialPortLib.pdb
+D:\QPS\GitHub\ConsoleAppBMS\BMSSerialPortLib\obj\Debug\SerialPortDataHandler.csproj.AssemblyReference.cache
+D:\QPS\GitHub\ConsoleAppBMS\BMSSerialPortLib\obj\Debug\SerialPortDataHandler.csproj.CoreCompileInputs.cache
+D:\QPS\GitHub\ConsoleAppBMS\BMSSerialPortLib\obj\Debug\BMSSerialPortLib.dll
+D:\QPS\GitHub\ConsoleAppBMS\BMSSerialPortLib\obj\Debug\BMSSerialPortLib.pdb

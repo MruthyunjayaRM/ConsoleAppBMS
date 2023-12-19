@@ -22,8 +22,9 @@ namespace BMSSerialPortLib
         private bool isRunning;
         private bool startRecieveTransmit;
         private Thread dataReceivedThread;
-        private SynchronizationContext synchronizationContext;
+        public SynchronizationContext synchronizationContext;
         private readonly object lockObject = new object();
+
 
         public event EventHandler<byte[]> dataReceivedHandler;
         private void DataReceivedThread()
@@ -77,6 +78,10 @@ namespace BMSSerialPortLib
         public bool isOpen()
         {
             if(serialPort.IsOpen) return true; else return false;
+        }
+        public bool IsThreadRunning
+        {
+            get { return isRunning; }
         }
 
         //public void InitializeSerialPort(string portName, int baudRate, int dataBits, Parity parity, StopBits stopBits, int readTimeout, int writeTimeout)
@@ -307,7 +312,7 @@ namespace BMSSerialPortLib
                     {
                         serialCom.status = RecieveStatus.SERIAL_ENUM_MSG_RECIEVED;
                         serialCom.dataToSend.CRCcheck = 0;
-                        //DataToBeSent(serialCom.dataRecieved.data, serialCom.dataRecieved.len); //LEts keep it simple for now
+                        DataToBeSent(serialCom.dataRecieved.data, serialCom.dataRecieved.len); //LEts keep it simple for now
                     }
                     else
                     {
@@ -530,10 +535,23 @@ namespace BMSSerialPortLib
             byte[] bytesArray = new byte[len];
             Array.Copy(data, bytesArray, len);
             // Raise the DataReceived event with the received data
-            synchronizationContext.Post(state =>
+            try
             {
-                dataReceivedHandler?.Invoke(this, bytesArray);
-            }, null);
+                if(synchronizationContext != null)
+                {
+                    synchronizationContext.Post(state =>
+                    {
+                        dataReceivedHandler?.Invoke(this, bytesArray);
+                    }, null);
+                }
+                else
+                {
+                    dataReceivedHandler?.Invoke(this, bytesArray);
+                }
+            }catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }  
         }
     }
 }

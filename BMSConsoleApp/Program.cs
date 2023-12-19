@@ -14,8 +14,10 @@ namespace BMSConsoleApp
     {
         static void Main(string[] args)
         {
+            Program program = new Program();
+            
             BatteryPack BMS = new BatteryPack();
-            BMSSerialPort serialPortManager = new BMSSerialPort(); ;
+            BMSSerialPort serialPortManager = new BMSSerialPort();
             SerialPortDetails serialPort = SerialPortDetails.CreateDefault();
             ComStatus comStatus;
             string[] BMSMenu = {
@@ -91,6 +93,14 @@ namespace BMSConsoleApp
                                     serialPort.stopBits = StopBits.One;
                                     serialPort.readTimeout = 1000;
                                     serialPort.writeTimeout = 1000;
+                                    serialPortManager = new BMSSerialPort(serialPort.portName,
+                                                                          serialPort.baudRate,
+                                                                          serialPort.dataBits,
+                                                                          serialPort.parity,
+                                                                          serialPort.stopBits,
+                                                                          serialPort.readTimeout,
+                                                                          serialPort.writeTimeout,
+                                                                          SynchronizationContext.Current);
                                     Console.WriteLine("Port Name:{0}\nBuadrate:{1}", serialPort.portName, serialPort.baudRate);
                                 }
                                 else Console.WriteLine("No Ports Available.(Connect the device)");
@@ -98,11 +108,13 @@ namespace BMSConsoleApp
                             break;
                         case "2":
                             {
-                                serialPortManager = new BMSSerialPort(serialPort.portName, serialPort.baudRate, serialPort.dataBits, serialPort.parity, serialPort.stopBits, serialPort.readTimeout, serialPort.writeTimeout, SynchronizationContext.Current);
                                 try
                                 {
-                                    if (serialPortManager != null) serialPortManager.Open();
-                                    else Console.WriteLine("Setup Serial port and then try");
+                                    if (serialPortManager != null)
+                                    {
+                                        serialPortManager.Open();
+                                    }
+                                    else Console.WriteLine("Setup Serial port and try again!");
                                 }
                                 catch (Exception ex) { Console.Write(ex.ToString()); }
                             }
@@ -111,9 +123,13 @@ namespace BMSConsoleApp
                             {
                                 try
                                 {
-                                    if (serialPortManager != null) serialPortManager.StartSerialThread();
-                                    else Console.WriteLine("Open Serial port and then try");
-
+                                    if (serialPortManager.isOpen())
+                                    {
+                                        serialPortManager.StartSerialThread();
+                                        serialPortManager.dataReceivedHandler += program.BmsSerialPort_DataReceived;
+                                        serialPortManager.synchronizationContext = SynchronizationContext.Current;
+                                    }
+                                    else Console.WriteLine("Open Serial port and try again!");
                                 }
                                 catch (Exception ex) { Console.Write(ex.ToString()); }
                             }
@@ -122,7 +138,7 @@ namespace BMSConsoleApp
                             {
                                 try
                                 {
-                                    if (serialPortManager.isOpen()) comStatus = ComStatus.BMS_SETUP;
+                                    if (serialPortManager.IsThreadRunning) comStatus = ComStatus.BMS_SETUP;
                                     else Console.WriteLine("There is issue in the serial port connection Please check");
                                 }catch (Exception ex) { Console.Write(ex.ToString()); }
                             }
@@ -132,7 +148,7 @@ namespace BMSConsoleApp
                 }
                 if(comStatus == ComStatus.BMS_SETUP)
                 {
-                    foreach (var item in SerialMenu)
+                    foreach (var item in BMSSetup)
                     {
                         Console.WriteLine(item.ToString());
                     }
@@ -167,6 +183,12 @@ namespace BMSConsoleApp
 
             }
             while (userMenuInput?.Length > 0);
+        }
+        private void BmsSerialPort_DataReceived(object sender, byte[] data)
+        {
+            // Handle the received data in the UI
+            // For example, update a TextBox with the received data
+            Console.WriteLine($"Data received: {BitConverter.ToString(data)}");
         }
     }
 }
