@@ -8,6 +8,10 @@ using System.Threading;
 using System.Xml.Serialization;
 using System.Xml.Linq;
 using System.Windows.Forms;
+using System.Collections;
+using System.Diagnostics;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.ComponentModel;
 
 namespace BMSSerialPortLib
 {
@@ -16,7 +20,7 @@ namespace BMSSerialPortLib
         public SerialPort serialPort = new SerialPort();
         public int count = 0;
         serialComHandler serialCom = new serialComHandler();
-        UniqIDTable[] uniqIDs = new UniqIDTable[10];
+        public UniqIDTable[] uniqIDs = new UniqIDTable[10];
         byte[] buffer = new byte[DefineValue.MaxSerialBufferSize];
         byte serialDataRecieved;
         private bool isRunning;
@@ -25,8 +29,7 @@ namespace BMSSerialPortLib
         public SynchronizationContext synchronizationContext;
         private readonly object lockObject = new object();
 
-
-        public event EventHandler<byte[]> dataReceivedHandler;
+        public event EventHandler<DataReceivedEventArgs> dataReceivedHandler;
         private void DataReceivedThread()
         {
             while (isRunning)
@@ -35,7 +38,7 @@ namespace BMSSerialPortLib
                 {
                     lock (lockObject)
                     {
-                        if (serialPort.IsOpen && serialPort.BytesToRead > 0)
+                        if (serialPort.IsOpen && serialPort.BytesToRead > 0 )
                         {
                             SerialPort_DataReceived();
                         }
@@ -74,16 +77,6 @@ namespace BMSSerialPortLib
         public BMSSerialPort()
         {
         }
-
-        public bool isOpen()
-        {
-            if(serialPort.IsOpen) return true; else return false;
-        }
-        public bool IsThreadRunning
-        {
-            get { return isRunning; }
-        }
-
         //public void InitializeSerialPort(string portName, int baudRate, int dataBits, Parity parity, StopBits stopBits, int readTimeout, int writeTimeout)
         //{
         //    serialPort.PortName = portName;
@@ -97,6 +90,28 @@ namespace BMSSerialPortLib
         //    dataReceivedThread = new Thread(DataReceivedThread);
         //    isRunning = false;
         //}
+        public bool IsSerialPortSet
+        {
+            get
+            {
+                if (serialPort != null) return true; else return false;         //Have to xorrect the bug
+            }
+        }
+        public bool IsOpen
+        {
+            get
+            {
+                if (serialPort.IsOpen) return true; else return false;
+            }
+        }
+        public bool IsThreadRunning
+        {
+            get { return isRunning; }
+        }
+        public void RecieveMcuIDStatusSet(bool value)
+        {
+            serialCom.RecieveMcuIDStatus = value;
+        }
         public void start_serialPortDataAssigning()
         {
             serialCom.dataRecieved.data = new byte[DefineValue.MaxSerialBufferSize];
@@ -112,13 +127,13 @@ namespace BMSSerialPortLib
             serialCom.ContrDisc = 0;
         }
 
-        public void setAttempt(int attempt)
+        public int SetAttempt
         {
-            serialCom.attempt = attempt;
+            set { serialCom.attempt = value; }
         }
-        public void incAttempt()
+        public int IncAttempt
         {
-            serialCom.attempt++;
+            set { serialCom.attempt++; }
         }
         public void StartSerialThread()
         {
@@ -243,7 +258,7 @@ namespace BMSSerialPortLib
                 return new byte[0];
             }
         }
-        public void tickHandler()
+        public void IntroductionHandler()
         {
             if (serialCom.attempt < 3)
             {
@@ -258,11 +273,11 @@ namespace BMSSerialPortLib
             else
             {
                 //MessageBox.Show("NO response from the MCUs", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                ShowMessage("NO response from the MCUs");
-                Console.WriteLine($"NO response from the MCUs");
+                //ShowMessage("NO response from the MCUs");
+                Console.WriteLine($"NO response from the BMS");
                 serialCom.attempt = 0;
             }
-            Console.ReadLine();
+            //Console.ReadLine();
         }
         private void ShowMessage(string message)
         {
@@ -312,7 +327,6 @@ namespace BMSSerialPortLib
                     {
                         serialCom.status = RecieveStatus.SERIAL_ENUM_MSG_RECIEVED;
                         serialCom.dataToSend.CRCcheck = 0;
-                        DataToBeSent(serialCom.dataRecieved.data, serialCom.dataRecieved.len); //LEts keep it simple for now
                     }
                     else
                     {
@@ -330,10 +344,15 @@ namespace BMSSerialPortLib
                             {
                                 //serialPort1.Write(serialCom.dataRecieved.data, 0, serialCom.dataRecieved.len);
                                 //Configure as Needed
-
+                                
                                 serialCom.dataToSend.data = serialCom.dataRecieved.data;
                                 serialCom.dataToSend.len = serialCom.dataRecieved.len;
-                                byte[] data = PacketCreation(Message.SYNC_BYTE, Message.CMD_PING_DISCOVERY, Message.SUB_CMD_RESPONSE, serialCom.dataToSend.len, serialCom.dataToSend.data, serialCom.dataToSend.crc);
+                                byte[] data = PacketCreation(Message.SYNC_BYTE, 
+                                    Message.CMD_PING_DISCOVERY, 
+                                    Message.SUB_CMD_RESPONSE, 
+                                    serialCom.dataToSend.len, 
+                                    serialCom.dataToSend.data, 
+                                    serialCom.dataToSend.crc);
                                 serialPort.Write(data, 0, data.Length);
                                 ClearSendData();
                                 serialPort.DiscardOutBuffer();
@@ -345,9 +364,9 @@ namespace BMSSerialPortLib
                             serialCom.attempt = 0;
                         }
                     }
-                    else if (serialCom.dataRecieved.cmd == Message.CMD_INTRO_SHORT_ADD && serialCom.status == RecieveStatus.SERIAL_ENUM_MSG_RECIEVED)
+                    else if (serialCom.dataRecieved.cmd == Message.CMD_INTRO_SHORT_ADD && serialCom.status == RecieveStatus.SERIAL_ENUM_MSG_RECIEVED )
                     {
-                        if (serialCom.dataRecieved.subCmd == Message.SUB_CMD_REQUEST)
+                        if (serialCom.dataRecieved.subCmd == Message.SUB_CMD_REQUEST && serialCom.RecieveMcuIDStatus == true)
                         {
                             if (serialCom.ContrDisc >= DefineValue.MaxMcu)
                             {
@@ -359,7 +378,7 @@ namespace BMSSerialPortLib
                             }
                             else if (serialCom.ContrDisc < DefineValue.MaxMcu)
                             {
-                                if (serialPort.IsOpen)
+                                if (serialPort.IsOpen && !UniqIDTableHelper.CheckControllerIDExists(uniqIDs, serialCom.dataRecieved.data))
                                 {
                                     //serialPort1.Write(serialCom.dataRecieved.data, 0, serialCom.dataRecieved.len);
                                     //Configure as Needed
@@ -371,23 +390,69 @@ namespace BMSSerialPortLib
                                     int PrevUIDIndex;
                                     if (serialCom.ContrDisc == 0) PrevUIDIndex = (int)serialCom.ContrDisc;
                                     else PrevUIDIndex = (int)(serialCom.ContrDisc - 1);
-                                    Int16 TempValue = (Int16)(uniqIDs[(PrevUIDIndex)].UID[0] << 8 | uniqIDs[(PrevUIDIndex)].UID[1]);
-                                    TempValue++;                            //Increae the UID short address
-
-
-                                    uniqIDs[serialCom.ContrDisc].UID[0] = (byte)(TempValue << 8);
-                                    uniqIDs[serialCom.ContrDisc].UID[1] = (byte)TempValue;
-                                    for (int i = 0; i < uniqIDs[serialCom.ContrDisc].ControllerID.Length; i++)
+                                    Int32 TempValue = 0;
+                                    for (int i = 0; i < DefineValue.UIDBufferSize; i++)
+                                    {
+                                        if(i == 0) TempValue = (int)(TempValue | uniqIDs[(PrevUIDIndex)].UID[i]);
+                                        else TempValue = (int)(TempValue << 8 | uniqIDs[(PrevUIDIndex)].UID[i]);
+                                    }
+                                    TempValue++;                            //Increase the UID short address
+                                    byte[] TempUIDbytes = BitConverter.GetBytes(TempValue);
+                                    if (BitConverter.IsLittleEndian)
+                                    {
+                                        // If the system is little-endian, reverse the byte order
+                                        Array.Reverse(TempUIDbytes);
+                                    }
+                                    Array.Reverse(TempUIDbytes);       //Complex logic dont changes Anything
+                                    Array.Copy(TempUIDbytes, uniqIDs[serialCom.ContrDisc].UID,Math.Min(TempUIDbytes.Length, uniqIDs[serialCom.ContrDisc].UID.Length));
+                                    Array.Reverse(uniqIDs[serialCom.ContrDisc].UID);
+                                    // Sending response with Unique id assigned to Controller ID at last
+                                    for (int i = 0; i < DefineValue.ControllerIDBufferSize; i++)
                                     {
                                         serialCom.dataToSend.data[i] = uniqIDs[serialCom.ContrDisc].ControllerID[i];
                                         serialCom.dataToSend.len++;
                                     }
-                                    serialCom.dataToSend.data[serialCom.dataToSend.len] = uniqIDs[serialCom.ContrDisc].UID[0];
-                                    serialCom.dataToSend.len++;
+                                    for (int i = 0; i < DefineValue.UIDBufferSize; i++)
+                                    {
+                                        serialCom.dataToSend.data[serialCom.dataToSend.len] = uniqIDs[serialCom.ContrDisc].UID[i];
+                                        serialCom.dataToSend.len++;
+                                    }
                                     serialCom.dataToSend.data[serialCom.dataToSend.len] = uniqIDs[serialCom.ContrDisc].UID[1];
                                     serialCom.dataToSend.len++;
-                                    byte[] data = PacketCreation(Message.SYNC_BYTE, Message.CMD_PING_DISCOVERY, Message.CMD_INTRO_SHORT_ADD, serialCom.dataToSend.len, serialCom.dataToSend.data, serialCom.dataToSend.crc);
+                                    byte[] data = PacketCreation(Message.SYNC_BYTE,
+                                                                 Message.CMD_PING_DISCOVERY,
+                                                                 Message.CMD_INTRO_SHORT_ADD,
+                                                                 serialCom.dataToSend.len,
+                                                                 serialCom.dataToSend.data,
+                                                                 serialCom.dataToSend.crc);
                                     serialCom.ContrDisc++;          //Increase the Constrollers descovered index
+                                    serialPort.Write(data, 0, data.Length);
+                                    DataToBeSent(serialCom.dataRecieved.data, serialCom.dataRecieved.len, RecivedDataType.MCU_ID);                               //----------------------LEts keep it simple for now
+                                    ClearSendData();
+                                    serialPort.DiscardOutBuffer();
+                                }
+                                else
+                                {
+                                    byte[] TempUID = new byte[DefineValue.UIDBufferSize];
+                                    byte[] TempControllerID = new byte[DefineValue.ControllerIDBufferSize];
+                                    Array.Copy(serialCom.dataRecieved.data, TempControllerID, DefineValue.ControllerIDBufferSize);
+                                    TempUID = UniqIDTableHelper.GetUIDByControllerID(uniqIDs, TempControllerID);
+                                    for (int i = 0; i < DefineValue.ControllerIDBufferSize; i++)
+                                    {
+                                        serialCom.dataToSend.data[i] = TempControllerID[i];
+                                        serialCom.dataToSend.len++;
+                                    }
+                                    for(int i = 0; i< DefineValue.UIDBufferSize; i++)
+                                    {
+                                        serialCom.dataToSend.data[serialCom.dataToSend.len] = TempUID[i];
+                                        serialCom.dataToSend.len++;
+                                    }
+                                    byte[] data = PacketCreation(Message.SYNC_BYTE,
+                                                                 Message.CMD_PING_DISCOVERY,
+                                                                 Message.CMD_INTRO_SHORT_ADD,
+                                                                 serialCom.dataToSend.len,
+                                                                 serialCom.dataToSend.data,
+                                                                 serialCom.dataToSend.crc);
                                     serialPort.Write(data, 0, data.Length);
                                     ClearSendData();
                                     serialPort.DiscardOutBuffer();
@@ -399,6 +464,20 @@ namespace BMSSerialPortLib
                                 serialCom.attempt = 0;
                             }
                         }
+                        else { serialCom.status = RecieveStatus.IDLE; }
+                    }
+                    else if(serialCom.dataRecieved.cmd == Message.CMD_BMS_CELL_VOLTAGES && serialCom.status == RecieveStatus.SERIAL_ENUM_MSG_RECIEVED)
+                    {
+                        if(serialCom.dataRecieved.subCmd == Message.SUB_CMD_RESPONSE )
+                        {
+                            DataToBeSent(serialCom.dataRecieved.data, serialCom.dataRecieved.len, RecivedDataType.CELLS_VOLTAGE_RECIEVED);
+                            serialCom.status = RecieveStatus.IDLE;
+                            ClearRecievedData();
+                            serialPort.DiscardInBuffer();
+                            // Zero the Attempt value of requesting
+                            serialCom.attempt = 0;
+                        }
+                        else { serialCom.status = RecieveStatus.IDLE; }
                     }
                     else if (serialCom.status == RecieveStatus.SERIAL_ENUM_MSG_RECIEVED)
                     {
@@ -434,6 +513,66 @@ namespace BMSSerialPortLib
             }
 
         }
+        protected virtual void DataToBeSent(byte[] data, byte len, RecivedDataType RDtype)
+        {
+            byte[] bytesArray = new byte[len];
+            Array.Copy(data, bytesArray, len);
+            // Raise the DataReceived event with the received data
+            try
+            {
+                DataReceivedEventArgs e = new DataReceivedEventArgs();
+                if (RDtype == RecivedDataType.MCU_ID)
+                {
+                    byte[] mcu_id = new byte[12];
+                    Array.Copy(data, mcu_id, 12);
+                    e = (new DataReceivedEventArgs
+                    {
+                        ByteArray = bytesArray,
+                        RecieveDType = RDtype,
+                        BMS_ID = UniqIDTableHelper.GetUIDByControllerID(uniqIDs, mcu_id),
+                        BMSIndex = 0
+                    });
+                }
+                else if (RDtype == RecivedDataType.CELLS_VOLTAGE_RECIEVED)
+                {
+                    byte[] tempUID = new byte[DefineValue.UIDBufferSize];
+                    for (int i = 0; i < DefineValue.UIDBufferSize; i++)
+                    {
+                        tempUID[i] = serialCom.dataRecieved.data[i];
+                    }
+                    if (UniqIDTableHelper.CheckUIDExists(uniqIDs, tempUID))
+                    {
+                        e = (new DataReceivedEventArgs
+                        {
+                            ByteArray = bytesArray,
+                            RecieveDType = RDtype,
+                            BMS_ID = tempUID,
+                            BMSIndex = UniqIDTableHelper.GetIndexOfMCUID(uniqIDs, tempUID)
+                        });
+                    }
+                }
+                else
+                {
+                    e = (new DataReceivedEventArgs { ByteArray = bytesArray, RecieveDType = RecivedDataType.RESPONSE });
+                }
+
+                if (synchronizationContext != null)
+                {
+                    synchronizationContext.Post(state =>
+                    {
+                        dataReceivedHandler?.Invoke(this, e);
+                    }, null);
+                }
+                else
+                {
+                    dataReceivedHandler?.Invoke(this, e);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
         public byte[] PacketCreation(byte[] SYNC_BYTE, byte CMD, byte SUB_CMD, byte len, byte[] DataBuffer, byte[] CRC)
         {
             byte[] newArray = new byte[5 + len + DefineValue.MaxCRCBufferSize];
@@ -447,7 +586,10 @@ namespace BMSSerialPortLib
                 for (int i = 0; i < len; i++)
                     TempByte[i] = DataBuffer[i];
                 TempByte.CopyTo(newArray, 5);
-                CRC16Generator.GenerateCRC16(TempByte, len).CopyTo(newArray, 5 + len);
+                if(len != 0)
+                {
+                    CRC16Generator.GenerateCRC16(TempByte, len).CopyTo(newArray, 5 + len);
+                } 
             }
             catch (Exception ex)
             {
@@ -511,6 +653,13 @@ namespace BMSSerialPortLib
                 serialCom.dataToSend.crc[i] = 0;
             }
         }
+        public void SerialSendDataString(string str)
+        {
+            byte[] data = Encoding.UTF8.GetBytes(str);
+            serialPort.Write(data, 0, data.Length);
+            serialPort.DiscardOutBuffer();
+            serialPort.DiscardInBuffer();
+        }
         //public void RefeshSerialPort()
         //{
         //    serialPort1.Close();
@@ -522,41 +671,16 @@ namespace BMSSerialPortLib
         //    serialPort1.ReadTimeout = 2000;
         //    serialPort1.Open();
         //}
-        public void SerialSendDataString(string str)
-        {
-            byte[] data = Encoding.UTF8.GetBytes(str);
-            serialPort.Write(data, 0, data.Length);
-            serialPort.DiscardOutBuffer();
-            serialPort.DiscardInBuffer();
-        }
-
-        protected virtual void DataToBeSent(byte[] data, byte len)
-        {
-            byte[] bytesArray = new byte[len];
-            Array.Copy(data, bytesArray, len);
-            // Raise the DataReceived event with the received data
-            try
-            {
-                if(synchronizationContext != null)
-                {
-                    synchronizationContext.Post(state =>
-                    {
-                        dataReceivedHandler?.Invoke(this, bytesArray);
-                    }, null);
-                }
-                else
-                {
-                    dataReceivedHandler?.Invoke(this, bytesArray);
-                }
-            }catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }  
-        }
     }
 }
 
-
+public class DataReceivedEventArgs : EventArgs
+{
+    public byte[] ByteArray { get; set; } = new byte[12];
+    public byte[] BMS_ID { get; set; } = new byte[2];
+    public RecivedDataType RecieveDType { get; set; }
+    public int BMSIndex { get; set; }
+}
 
 public struct MsgPayload
 {
@@ -583,12 +707,92 @@ public struct serialComHandler
     public MsgPayload dataToSend;
     public MsgPayload dataRecieved;
     public uint ContrDisc;
-
+    public bool RecieveMcuIDStatus;
 }
 public struct UniqIDTable
 {
     public byte[] UID;
     public byte[] ControllerID;
+}
+
+public class UniqIDTableHelper
+{
+    public static byte[] GetUIDByControllerID(UniqIDTable[] tables, byte[] controllerID)
+    {
+        foreach (var table in tables)
+        {
+            if (ArraysEqual(table.ControllerID, controllerID))
+            {
+                return table.UID;
+            }
+        }
+
+        return null; // ControllerID not found
+    }
+    public static int GetIndexOfMCUID(UniqIDTable[] tables, byte[] mcuid)
+    {
+        int index = 0;
+        foreach(var table in tables)
+        {
+            if (ArraysEqual(table.UID, mcuid))
+            {
+                return index;
+            }
+            index++;
+        }
+        return -1;
+    }
+    public static bool CheckUIDExists(UniqIDTable[] tables, byte[] uid)
+    {
+        foreach (var table in tables)
+        {
+            if (ArraysEqual(table.UID, uid))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    public static bool CheckControllerIDExists(UniqIDTable[] tables, byte[] controllerID)
+    {
+        if(controllerID.Length > 12)
+        {
+            byte[] tempBytes = new byte[12];
+            tempBytes = controllerID;
+            controllerID = new byte[12];
+            Array.Copy(tempBytes, controllerID, 12);
+        }
+        foreach (var table in tables)
+        {
+            byte[] TempBytes = new byte[2];
+
+            if (ArraysEqual(table.ControllerID, controllerID))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Helper method to check if two byte arrays are equal
+    private static bool ArraysEqual(byte[] array1, byte[] array2)
+    {
+        if (ReferenceEquals(array1, array2))
+            return true;
+
+        if (array1 == null || array2 == null)
+            return false;
+
+        if (array1.Length != array2.Length)
+            return false;
+
+        for (int i = 0; i < array1.Length; i++)
+        {
+            if (array1[i] != array2[i])
+                return false;
+        }
+        return true;
+    }
 }
 
 public static class Message
@@ -598,6 +802,7 @@ public static class Message
     public const byte SUB_CMD_RESPONSE = 0x02;
     public const byte CMD_PING_DISCOVERY = 0x50;
     public const byte CMD_INTRO_SHORT_ADD = 0x60;
+    public const byte CMD_BMS_CELL_VOLTAGES = 0x70;
 }
 public static class DefineValue
 {
@@ -605,7 +810,15 @@ public static class DefineValue
     public const int MaxSerialBufferSize = 1024;
     public const int MaxCRCBufferSize = 2;
     public const int ControllerIDBufferSize = 12;
-    public const int UIDBufferSize = 2;     //Also do changes in code
+    public const int UIDBufferSize = 2;     //Also do changes in code ,,,,,,,,,,,Max 4 bytes u can increase
+}
+
+public enum RecivedDataType
+{
+    RESPONSE,
+    MCU_ID,
+    CELLS_VOLTAGE,
+    CELLS_VOLTAGE_RECIEVED
 }
 
 
