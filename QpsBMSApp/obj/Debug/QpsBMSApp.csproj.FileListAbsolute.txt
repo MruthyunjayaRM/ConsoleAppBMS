@@ -1,0 +1,36 @@
+D:\QPS\GitHub\Battery Analyser\HelloWorld\QpsBMSApp\bin\Debug\QpsBMSApp.exe.config
+D:\QPS\GitHub\Battery Analyser\HelloWorld\QpsBMSApp\bin\Debug\QpsBMSApp.exe
+D:\QPS\GitHub\Battery Analyser\HelloWorld\QpsBMSApp\bin\Debug\QpsBMSApp.pdb
+D:\QPS\GitHub\Battery Analyser\HelloWorld\QpsBMSApp\obj\Debug\QpsBMSApp.csproj.AssemblyReference.cache
+D:\QPS\GitHub\Battery Analyser\HelloWorld\QpsBMSApp\obj\Debug\MainWindow.g.cs
+D:\QPS\GitHub\Battery Analyser\HelloWorld\QpsBMSApp\obj\Debug\App.g.cs
+D:\QPS\GitHub\Battery Analyser\HelloWorld\QpsBMSApp\obj\Debug\QpsBMSApp_MarkupCompile.cache
+D:\QPS\GitHub\Battery Analyser\HelloWorld\QpsBMSApp\obj\Debug\QpsBMSApp_MarkupCompile.lref
+D:\QPS\GitHub\Battery Analyser\HelloWorld\QpsBMSApp\obj\Debug\MainWindow.baml
+D:\QPS\GitHub\Battery Analyser\HelloWorld\QpsBMSApp\obj\Debug\QpsBMSApp.g.resources
+D:\QPS\GitHub\Battery Analyser\HelloWorld\QpsBMSApp\obj\Debug\QpsBMSApp.Properties.Resources.resources
+D:\QPS\GitHub\Battery Analyser\HelloWorld\QpsBMSApp\obj\Debug\QpsBMSApp.csproj.GenerateResource.cache
+D:\QPS\GitHub\Battery Analyser\HelloWorld\QpsBMSApp\obj\Debug\QpsBMSApp.csproj.CoreCompileInputs.cache
+D:\QPS\GitHub\Battery Analyser\HelloWorld\QpsBMSApp\obj\Debug\QpsBMSApp.exe
+D:\QPS\GitHub\Battery Analyser\HelloWorld\QpsBMSApp\obj\Debug\QpsBMSApp.pdb
+D:\QPS\GitHub\Battery Analyser\HelloWorld\QpsBMSApp\obj\Debug\GeneratedInternalTypeHelper.g.cs
+D:\QPS\GitHub\Battery Analyser\HelloWorld\QpsBMSApp\obj\Debug\LEDControl.g.cs
+D:\QPS\GitHub\Battery Analyser\HelloWorld\QpsBMSApp\obj\Debug\LEDControl.baml
+D:\QPS\GitHub\ConsoleAppBMS\QpsBMSApp\bin\Debug\QpsBMSApp.exe.config
+D:\QPS\GitHub\ConsoleAppBMS\QpsBMSApp\bin\Debug\QpsBMSApp.exe
+D:\QPS\GitHub\ConsoleAppBMS\QpsBMSApp\bin\Debug\QpsBMSApp.pdb
+D:\QPS\GitHub\ConsoleAppBMS\QpsBMSApp\obj\Debug\QpsBMSApp.csproj.AssemblyReference.cache
+D:\QPS\GitHub\ConsoleAppBMS\QpsBMSApp\obj\Debug\LEDControl.g.cs
+D:\QPS\GitHub\ConsoleAppBMS\QpsBMSApp\obj\Debug\MainWindow.g.cs
+D:\QPS\GitHub\ConsoleAppBMS\QpsBMSApp\obj\Debug\App.g.cs
+D:\QPS\GitHub\ConsoleAppBMS\QpsBMSApp\obj\Debug\GeneratedInternalTypeHelper.g.cs
+D:\QPS\GitHub\ConsoleAppBMS\QpsBMSApp\obj\Debug\QpsBMSApp_MarkupCompile.cache
+D:\QPS\GitHub\ConsoleAppBMS\QpsBMSApp\obj\Debug\QpsBMSApp_MarkupCompile.lref
+D:\QPS\GitHub\ConsoleAppBMS\QpsBMSApp\obj\Debug\LEDControl.baml
+D:\QPS\GitHub\ConsoleAppBMS\QpsBMSApp\obj\Debug\MainWindow.baml
+D:\QPS\GitHub\ConsoleAppBMS\QpsBMSApp\obj\Debug\QpsBMSApp.g.resources
+D:\QPS\GitHub\ConsoleAppBMS\QpsBMSApp\obj\Debug\QpsBMSApp.Properties.Resources.resources
+D:\QPS\GitHub\ConsoleAppBMS\QpsBMSApp\obj\Debug\QpsBMSApp.csproj.GenerateResource.cache
+D:\QPS\GitHub\ConsoleAppBMS\QpsBMSApp\obj\Debug\QpsBMSApp.csproj.CoreCompileInputs.cache
+D:\QPS\GitHub\ConsoleAppBMS\QpsBMSApp\obj\Debug\QpsBMSApp.exe
+D:\QPS\GitHub\ConsoleAppBMS\QpsBMSApp\obj\Debug\QpsBMSApp.pdb

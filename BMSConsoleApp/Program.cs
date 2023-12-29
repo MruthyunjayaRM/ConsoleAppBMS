@@ -14,7 +14,7 @@ namespace BMSConsoleApp
 {
     internal class Program
     {
-        static BatteryPack[] BMS = new BatteryPack[10];
+        static BatteryPack[] BMS = new BatteryPack[definevalue.MAXBMS];
         static BmsCom BMSComStatus = new BmsCom();
         //static int BMSConnected = 0;
         static void Main(string[] args)
@@ -329,6 +329,7 @@ namespace BMSConsoleApp
                             {
                                 comStatus = ComStatus.BMS_SETUP;
                                 BMSComStatus = new BmsCom();
+                                BMS = new BatteryPack[definevalue.MAXBMS];
                                 Console.WriteLine("Exited Successfully......");
                             }
                             break;
@@ -407,6 +408,11 @@ public static class ByteArrayConverter
         }
         return byteArray;
     }
+}
+
+public static class definevalue
+{
+    public const int MAXBMS = 10;
 }
 
 public enum ComStatus

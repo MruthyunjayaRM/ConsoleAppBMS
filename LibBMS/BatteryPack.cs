@@ -8,7 +8,7 @@ namespace LibBMS
 {
     public class BatteryPack
     {
-        public byte[] BMSPackID { get; set; } = new byte[2];                  //
+        public byte[] BMSPackID { get; set; } = new byte[DefineValue.MAX_BMS];                  //
         public byte[] MCUID { get; set; }                   // Introduction-Time only
         public int CellCount { get; set; } = DefineValue.DEFAULT_CELL_NUMBER;
         public float CellVoltage { get; set; }
@@ -91,8 +91,6 @@ namespace LibBMS
         public bool ChargerState {  get; set; }             //
         public bool DischargeState { get; set; }            //
         public bool HeaterState {  get; set; }              //
-        public bool AutoPolling { get; set; }
-
 
         public BatteryPack(byte[] BMSPackID, byte[] MCUID, float CellVoltage, int CellAh, int CRating){
             this.MCUID = MCUID;
