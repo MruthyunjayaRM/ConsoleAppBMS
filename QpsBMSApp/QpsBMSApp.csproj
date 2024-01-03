@@ -105,9 +105,21 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\BMSSerialPortLib\SerialPortDataHandler.csproj">
+      <Project>{505a0766-7468-4995-8076-bb7bc9a87240}</Project>
+      <Name>SerialPortDataHandler</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LibBMS\LibBMS.csproj">
+      <Project>{c87b11ba-42d6-4fa6-afc6-986b2cc6b6e3}</Project>
+      <Name>LibBMS</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\qps_logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Reload_NoBg.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

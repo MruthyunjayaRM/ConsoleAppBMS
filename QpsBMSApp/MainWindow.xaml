@@ -80,7 +80,7 @@
                        HorizontalAlignment="Center"
                        FontFamily="Fonts/#BodoniFLF-Roman"/>
             </Grid>
-            
+
             <Grid Grid.Row="1" Grid.Column="0" ShowGridLines="True">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -128,7 +128,7 @@
                         <Button Grid.Column="12" Name="Cell13Button" Content="13" FontSize="14" FontWeight="Medium" Foreground="White"></Button>
                         <Button Grid.Column="13" Name="Cell14Button" Content="14" FontSize="14" FontWeight="Medium" Foreground="White"></Button>
                         <Button Grid.Column="14" Name="Cell15Button" Content="15" FontSize="14" FontWeight="Medium" Foreground="White"></Button>
-                        <Button Grid.Column="15" Name="Cell16Button" Content="16" FontSize="14" FontWeight="Medium" Foreground="White"></Button>
+                        <Button Grid.Column="15" Name="Cell16Button" Content="16" FontSize="14" FontWeight="Medium" Foreground="White" Click="Cell16Button_Click"></Button>
                     </Grid>
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
@@ -450,7 +450,7 @@
 
                 <Grid Grid.Row="1" Grid.Column="1" ShowGridLines="True">
                     <Grid.RowDefinitions>
-                        <RowDefinition Name="SerialPort" Height="140"/>
+                        <RowDefinition Name="Serial_Port" Height="140"/>
                         <RowDefinition Name="SystemStatus" Height="100"/>
                         <RowDefinition Name="AlarmStatus"/>
                         <RowDefinition Name="ProtectStatus"/>
@@ -475,20 +475,21 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
 
-                            <Grid Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center">
-                                <Label Content="Port" FontSize="18"/>
+                            <Grid Grid.Row="0" Grid.Column="0" >
+                                <Button Name="ButtonReload" Width="20" Height="20" Margin="40,0,0,0" Background="White" HorizontalAlignment="Left" VerticalAlignment="Center" Click="ButtonReload_Click">
+                                    <Image Source="Images/Reload_NoBg.png" Width="15" Height="15" />
+                                </Button>
+                                <Label Content="Port" FontSize="18" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                             </Grid>
                             <Grid Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center">
                                 <Label Content="Polling Count" FontSize="18"/>
                             </Grid>
 
                             <Grid Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <ComboBox Name="ComboBoxPorts" Width="95" Height="30">
-                                    <ComboBoxItem Content=""></ComboBoxItem>
-                                </ComboBox>
+                                <ComboBox Name="ComboBoxPorts" Width="95" HorizontalAlignment="Center"/>
                             </Grid>
                             <Grid Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <ComboBox Name="ComboBoxPollingCount" Width="95" Height="30" VerticalAlignment="Top">
+                                <ComboBox x:Name="ComboBoxPollingCount" Width="95" Height="30" VerticalAlignment="Top" >
                                     <ComboBoxItem Content=""></ComboBoxItem>
                                 </ComboBox>
                             </Grid>
@@ -512,7 +513,7 @@
                             </Grid>
 
                             <Grid Grid.Row="0" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <Button x:Name="ButtonOpenSerialCom" Content="Open" FontSize="18" Width="120" Height="30" Background="#f38886"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Button x:Name="ButtonOpenSerialCom" Content="Open" FontSize="18" Width="120" Height="30" Background="#f38886"  HorizontalAlignment="Center" VerticalAlignment="Bottom" Click="ButtonOpenSerialCom_Click"/>
                             </Grid>
                             <Grid Grid.Row="1" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <Button x:Name="ButtonStartMonitor" Content="Start Monitor" FontSize="18" Width="120" Height="30" Background="#f38886" HorizontalAlignment="Center" VerticalAlignment="Center"/>

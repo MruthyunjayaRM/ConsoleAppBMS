@@ -34,3 +34,8 @@ D:\QPS\GitHub\ConsoleAppBMS\QpsBMSApp\obj\Debug\QpsBMSApp.csproj.GenerateResourc
 D:\QPS\GitHub\ConsoleAppBMS\QpsBMSApp\obj\Debug\QpsBMSApp.csproj.CoreCompileInputs.cache
 D:\QPS\GitHub\ConsoleAppBMS\QpsBMSApp\obj\Debug\QpsBMSApp.exe
 D:\QPS\GitHub\ConsoleAppBMS\QpsBMSApp\obj\Debug\QpsBMSApp.pdb
+D:\QPS\GitHub\ConsoleAppBMS\QpsBMSApp\bin\Debug\BMSSerialPortLib.dll
+D:\QPS\GitHub\ConsoleAppBMS\QpsBMSApp\bin\Debug\LibBMS.dll
+D:\QPS\GitHub\ConsoleAppBMS\QpsBMSApp\bin\Debug\BMSSerialPortLib.pdb
+D:\QPS\GitHub\ConsoleAppBMS\QpsBMSApp\bin\Debug\LibBMS.pdb
+D:\QPS\GitHub\ConsoleAppBMS\QpsBMSApp\obj\Debug\QpsBMSApp.csproj.CopyComplete
