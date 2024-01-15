@@ -38,7 +38,7 @@
                             </TransformGroup>
                         </RadialGradientBrush.RelativeTransform>
                         <GradientStop Color="White" Offset="0"/>
-                        <GradientStop Color="LightGreen" Offset="1"/>
+                        <GradientStop  x:Name="LED_Color" Color="LightGreen" Offset="1"/>
                     </RadialGradientBrush>
                 </Ellipse.Fill>
             </Ellipse>

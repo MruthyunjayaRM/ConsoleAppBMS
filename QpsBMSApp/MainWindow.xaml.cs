@@ -157,3 +157,9 @@ public struct SerialPortDetails
         };
     }
 }
+
+/*
+ * ON and OFF color Change
+ * OFF   ----   LEDChargeOFF.LED_Color.Color = Colors.AliceBlue;
+ * ON    ----   LEDChargeOFF.LED_Color.Color = Colors.LightGreen;
+ */
